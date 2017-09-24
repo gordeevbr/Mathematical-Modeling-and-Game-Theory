@@ -47,4 +47,4 @@ def plot(end, step):
     plt.show()
 
 
-plot(10.0, 0.2)
+plot(10.0, 0.1)
