@@ -34,7 +34,7 @@ def zero_summ_saddle_minimax(matrix):
             max_min = max_val
             max_min_index = max_index
 
-    if max_min_index[0] == min_max_index[0] and max_min_index[1] == min_max_index[1]:
+    if max_min <= min_max:
         return max_min_index
     else:
         return [-1, -1]
@@ -47,7 +47,7 @@ print(result)
 print(demo_matrix.item((result[0], result[1])))
 print('--------')
 
-demo_matrix = numpy.matrix([[1, 2, 3], [3, 4, 3], [5, 4, 3]])
+demo_matrix = numpy.matrix([[1, 2, 5], [3, 3, 3], [5, 5, 3]])
 result = zero_summ_saddle_minimax(demo_matrix)
 print(demo_matrix)
 print(result)
