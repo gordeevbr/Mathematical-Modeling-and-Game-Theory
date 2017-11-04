@@ -4,6 +4,7 @@ import math
 
 DEBUG = True
 CONVERGENCE_DELTA = 0.1
+ITERATING_CAP = 100000
 
 
 def count_p1_total_vector(player1_vector, matrix):
@@ -43,7 +44,7 @@ def is_converged(player1_res_vector, player2_res_vector, matrix, iteration):
     low = min_value / iteration
 
     if DEBUG:
-        print("Higher: %8.4f, Lower: %8.4f, Delta: %8.4f" % (high, low, math.fabs(high - low)))
+        print("Step: %i, Higher: %8.4f, Lower: %8.4f, Delta: %8.4f" % (iteration, high, low, math.fabs(high - low)))
 
     return math.fabs(high - low) < CONVERGENCE_DELTA
 
@@ -107,8 +108,7 @@ def brown_robinson(matrix):
     iteration = 1
     result = brown_robinson_step(player1_res_vector, player2_res_vector, matrix)
 
-    while iteration < max(shape[0], shape[1]) * 10 \
-            and not is_converged(player1_res_vector, player2_res_vector, matrix, iteration):
+    while iteration < ITERATING_CAP and not is_converged(player1_res_vector, player2_res_vector, matrix, iteration):
         iteration += 1
         result = brown_robinson_step(player1_res_vector, player2_res_vector, matrix)
 
@@ -128,5 +128,6 @@ def solve_and_print(matrix, name):
 
 solve_and_print(numpy.matrix([[1, 2], [3, 4]]), 'Custom matrix [2x2]')
 solve_and_print(numpy.matrix([[1, 2, 3], [3, 4, 3], [5, 4, 3]]), 'Custom matrix [3x3]')
+solve_and_print(numpy.matrix([[3, 6, 8], [9, 4, 2], [7, 5, 4]]), 'Matrix from algo example [3x3]')
 solve_and_print(numpy.matrix([[0, -1, 1], [1, 0, -1], [-1, 1, 0]]), 'Rock Paper Scissors')
 solve_and_print(numpy.matrix([[0, -3], [3, 0]]), 'Prisoner\'s Dilemma')
