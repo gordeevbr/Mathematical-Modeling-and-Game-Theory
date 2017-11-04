@@ -118,16 +118,15 @@ def brown_robinson(matrix):
         return [-1, -1]
 
 
-demo_matrix = numpy.matrix([[1, 2], [3, 4]])
-result = brown_robinson(demo_matrix)
-print(demo_matrix)
-print(result)
-print(demo_matrix.item((result[0], result[1])))
-print('--------')
+def solve_and_print(matrix, name):
+    print(name)
+    result = brown_robinson(matrix)
+    print(matrix)
+    print(result)
+    print(matrix.item((result[0], result[1])))
+    print('--------')
 
-demo_matrix = numpy.matrix([[1, 2, 3], [3, 4, 3], [5, 4, 3]])
-result = brown_robinson(demo_matrix)
-print(demo_matrix)
-print(result)
-print(demo_matrix.item((result[0], result[1])))
-print('--------')
+solve_and_print(numpy.matrix([[1, 2], [3, 4]]), 'Custom matrix [2x2]')
+solve_and_print(numpy.matrix([[1, 2, 3], [3, 4, 3], [5, 4, 3]]), 'Custom matrix [3x3]')
+solve_and_print(numpy.matrix([[0, -1, 1], [1, 0, -1], [-1, 1, 0]]), 'Rock Paper Scissors')
+solve_and_print(numpy.matrix([[0, -3], [3, 0]]), 'Prisoner\'s Dilemma')
