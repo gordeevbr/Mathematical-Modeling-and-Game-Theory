@@ -9,24 +9,22 @@ CONVERGENCE_DELTA = 0.1
 def count_p1_total_vector(player1_vector, matrix):
     shape = matrix.shape
     res = [0] * shape[1]
-    for i in range(0, len(player1_vector)):
+    for i in range(0, shape[0]):
         for j in range(0, shape[1]):
-            res[j] = res[j] + matrix.item((player1_vector[i], j))
+            res[j] = res[j] + matrix.item((i, j)) * player1_vector[i]
     return res
 
 
 def count_p2_total_vector(player2_vector, matrix):
     shape = matrix.shape
     res = [0] * shape[0]
-    for j in range(0, len(player2_vector)):
+    for j in range(0, shape[1]):
         for i in range(0, shape[0]):
-            res[i] = res[i] + matrix.item((i, player2_vector[j]))
+            res[i] = res[i] + matrix.item((i, j)) * player2_vector[j]
     return res
 
 
-def is_converged(player1_res_vector, player2_res_vector, matrix):
-    shape = matrix.shape
-
+def is_converged(player1_res_vector, player2_res_vector, matrix, iteration):
     p2_total = count_p2_total_vector(player2_res_vector, matrix)
 
     max_value = -math.inf
@@ -41,18 +39,16 @@ def is_converged(player1_res_vector, player2_res_vector, matrix):
         if p1_total[j] < min_value:
             min_value = p1_total[j]
 
-    low = max_value / len(p2_total)
-    high = min_value / len(p1_total)
+    high = max_value / iteration
+    low = min_value / iteration
 
     if DEBUG:
-        print("Higher: {}, Lower: {}, Delta: {}", high, low, high - low)
+        print("Higher: %8.4f, Lower: %8.4f, Delta: %8.4f" % (high, low, math.fabs(high - low)))
 
     return math.fabs(high - low) < CONVERGENCE_DELTA
 
 
 def brown_robinson_step(player1_res_vector, player2_res_vector, matrix):
-    shape = matrix.shape
-
     p2_total = count_p2_total_vector(player2_res_vector, matrix)
 
     max_value = -math.inf
@@ -72,6 +68,8 @@ def brown_robinson_step(player1_res_vector, player2_res_vector, matrix):
             min_value = p1_total[j]
             min_index = j
     player2_res_vector[min_index] += 1
+
+    return [max_index, min_index]
 
 
 def brown_robinson(matrix):
@@ -106,13 +104,16 @@ def brown_robinson(matrix):
 
     player2_res_vector[min_index] = 1
 
-    iteration = 0
+    iteration = 1
+    result = brown_robinson_step(player1_res_vector, player2_res_vector, matrix)
 
-    while iteration < max(shape[0], shape[1]) * 10 and not is_converged(player1_res_vector, player2_res_vector, matrix):
-        brown_robinson_step(player1_res_vector, player2_res_vector, matrix)
+    while iteration < max(shape[0], shape[1]) * 10 \
+            and not is_converged(player1_res_vector, player2_res_vector, matrix, iteration):
+        iteration += 1
+        result = brown_robinson_step(player1_res_vector, player2_res_vector, matrix)
 
-    if is_converged(player1_res_vector, player2_res_vector, matrix):
-        return [player1_res_vector[len(player1_res_vector) - 1], player2_res_vector[len(player2_res_vector) - 1]]
+    if is_converged(player1_res_vector, player2_res_vector, matrix, iteration):
+        return result
     else:
         return [-1, -1]
 
