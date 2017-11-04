@@ -3,7 +3,7 @@ import numpy
 import math
 
 DEBUG = True
-CONVERGENCE_DELTA = 0.1
+CONVERGENCE_DELTA = 0.01
 ITERATING_CAP = 100000
 
 
@@ -25,7 +25,7 @@ def count_p2_total_vector(player2_vector, matrix):
     return res
 
 
-def is_converged(player1_res_vector, player2_res_vector, matrix, iteration):
+def is_converged(player1_res_vector, player2_res_vector, matrix, prev, iteration):
     p2_total = count_p2_total_vector(player2_res_vector, matrix)
 
     max_value = -math.inf
@@ -42,11 +42,12 @@ def is_converged(player1_res_vector, player2_res_vector, matrix, iteration):
 
     high = max_value / iteration
     low = min_value / iteration
+    avg = (high - low) / 2
 
     if DEBUG:
-        print("Step: %i, Higher: %8.4f, Lower: %8.4f, Delta: %8.4f" % (iteration, high, low, math.fabs(high - low)))
+        print("Step: %i, Higher: %8.4f, Lower: %8.4f, Avg: %8.4f" % (iteration, high, low, avg))
 
-    return math.fabs(high - low) < CONVERGENCE_DELTA
+    return [math.fabs(prev - avg) < CONVERGENCE_DELTA, avg]
 
 
 def brown_robinson_step(player1_res_vector, player2_res_vector, matrix):
@@ -106,13 +107,18 @@ def brown_robinson(matrix):
     player2_res_vector[min_index] = 1
 
     iteration = 1
-    result = brown_robinson_step(player1_res_vector, player2_res_vector, matrix)
+    result = [min_max_index, min_index]
+    prev = - math.inf
 
-    while iteration < ITERATING_CAP and not is_converged(player1_res_vector, player2_res_vector, matrix, iteration):
+    while iteration < ITERATING_CAP:
+        convergence = is_converged(player1_res_vector, player2_res_vector, matrix, prev, iteration)
+        prev = convergence[1]
+        if convergence[0]:
+            break
         iteration += 1
         result = brown_robinson_step(player1_res_vector, player2_res_vector, matrix)
 
-    if is_converged(player1_res_vector, player2_res_vector, matrix, iteration):
+    if is_converged(player1_res_vector, player2_res_vector, matrix, prev, iteration):
         return result
     else:
         return [-1, -1]
