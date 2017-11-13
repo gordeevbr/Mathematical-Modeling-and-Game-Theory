@@ -46,6 +46,8 @@ def is_converged(player1_res_vector, player2_res_vector, matrix, prev, iteration
 
     if DEBUG:
         print("Step: %i, Higher: %8.4f, Lower: %8.4f, Avg: %8.4f" % (iteration, high, low, avg))
+        print(player1_res_vector)
+        print(player2_res_vector)
 
     return [math.fabs(prev - avg) < CONVERGENCE_DELTA, avg]
 
