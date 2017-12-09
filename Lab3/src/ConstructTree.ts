@@ -54,12 +54,13 @@ const parseNode = (node: ITreeNode, field: Mark[][], mark: Mark) => {
             nextNode.winRate = 1;
             break;
           case GameState.PLAYER_WON:
-            nextNode.winRate = 0;
+            nextNode.winRate = -1;
             break;
         }
       }
     }
   }
 
-  node.winRate = node.children.map((child) => child.winRate).reduce((a, b) => a + b, 0) / node.children.length;
+  node.winRate = node.children
+    .sort((a, b) => nextMark === Mark.BOT ? b.winRate - a.winRate : a.winRate - b.winRate)[0].winRate;
 };
