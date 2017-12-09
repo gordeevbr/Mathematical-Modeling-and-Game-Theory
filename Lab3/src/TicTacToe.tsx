@@ -2,14 +2,14 @@ import * as React from "react";
 
 import {Bot} from "./Bot";
 import {Config} from "./Config";
-import {GameState, IMove, Mark} from "./Domain";
-import {getStateAfterMove} from "./GetStateAfterMove";
+import {GameState, IPly, Mark} from "./Domain";
+import {copy, getStateAfterMove} from "./FieldUtils";
 
 export interface ITicTacToeState {
   field: Mark[][];
   bot: Bot;
   gameState: GameState;
-  log: IMove[];
+  log: IPly[];
 }
 
 export class TicTacToe extends React.Component<{}, ITicTacToeState> {
@@ -28,7 +28,7 @@ export class TicTacToe extends React.Component<{}, ITicTacToeState> {
 
     this.setState(
       {field, bot, gameState: GameState.IN_PROCESS, log: []},
-      () => Config.playerGoesFirst ? null : bot.move(field),
+      () => Config.playerGoesFirst ? null : bot.move(),
     );
   }
 
@@ -76,7 +76,7 @@ export class TicTacToe extends React.Component<{}, ITicTacToeState> {
   }
 
   private placeMark(prevState: ITicTacToeState, mark: Mark, row: number, col: number) {
-    const field = JSON.parse(JSON.stringify(prevState.field));
+    const field = copy(prevState.field);
     field[row][col] = mark;
 
     const newMove = {row, col, mark};
@@ -100,7 +100,7 @@ export class TicTacToe extends React.Component<{}, ITicTacToeState> {
 
   private botMove() {
     if (this.state.gameState === GameState.IN_PROCESS) {
-      this.state.bot.move(this.state.field);
+      this.state.bot.move(this.state.log[this.state.log.length - 1]);
     }
   }
 

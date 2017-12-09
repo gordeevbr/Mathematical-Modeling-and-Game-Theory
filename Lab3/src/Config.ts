@@ -1,6 +1,6 @@
 export const Config = {
-  height: 4,
+  height: 3,
   playerGoesFirst: true,
-  width: 4,
+  width: 3,
   winLineSize: 3,
 };

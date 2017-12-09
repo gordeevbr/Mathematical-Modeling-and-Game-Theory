@@ -3,10 +3,10 @@ export enum Mark {
 }
 
 export enum GameState {
-  IN_PROCESS, DRAW, PLAYER_WON, BOT_WON,
+  IN_PROCESS = 0, DRAW = 1, PLAYER_WON = 2, BOT_WON = 3,
 }
 
-export interface IMove {
+export interface IPly {
   mark: Mark;
   row: number;
   col: number;
@@ -14,9 +14,8 @@ export interface IMove {
 
 export interface ITreeNode {
   winRate: number;
-  drawRate: number;
-  loseRate: number;
   row: number;
   col: number;
   mark: Mark;
+  children: ITreeNode[];
 }

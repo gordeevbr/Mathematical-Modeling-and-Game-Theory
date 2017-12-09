@@ -1,5 +1,5 @@
-import {ITreeNode, Mark} from "./Domain";
 import {constructTree} from "./ConstructTree";
+import {IPly, ITreeNode} from "./Domain";
 
 export class Bot {
 
@@ -12,7 +12,12 @@ export class Bot {
     this.treeTopNode = this.currentTreeNode = constructTree();
   }
 
-  public move(field: Mark[][]) {
+  public move(lastPly?: IPly) {
+    this.currentTreeNode = lastPly == null ?
+      this.currentTreeNode.children.sort((a, b) => b.winRate - a.winRate)[0] :
+      this.currentTreeNode.children.find((node) => node.col === lastPly.col && node.row === lastPly.row)
+        .children.sort((a, b) => b.winRate - a.winRate)[0];
 
+    this.movedCallback(this.currentTreeNode.row, this.currentTreeNode.col);
   }
 }

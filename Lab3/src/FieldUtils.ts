@@ -1,13 +1,26 @@
-import {GameState, IMove, Mark} from "./Domain";
 import {Config} from "./Config";
+import {GameState, IPly, Mark} from "./Domain";
 
-export const getStateAfterMove = (field: Mark[][], lastMove: IMove) => {
+export const noMoreFreeNodes = (field: Mark[][]) =>
+  field.map((row) => row.findIndex((cell) => cell === Mark.NONE)).findIndex((index) => index !== -1) === -1;
+
+export const copy = (oldField: Mark[][]) => {
+  const field: Mark[][] = [];
+  for (let i = 0; i < Config.height; i++) {
+    field[i] = [];
+    for (let j = 0; j < Config.width; j++) {
+      field[i][j] = oldField[i][j];
+    }
+  }
+  return field;
+};
+
+export const getStateAfterMove = (field: Mark[][], lastMove: IPly) => {
   const maxLength = runners.map((runner) => run(runner, field, lastMove)).reduce((a, b) => Math.max(a, b));
   if (maxLength >= Config.winLineSize) {
     return lastMove.mark === Mark.PLAYER ? GameState.PLAYER_WON : GameState.BOT_WON;
   } else {
-    return field.map((row) => row.findIndex((cell) => cell === Mark.NONE)).findIndex((index) => index !== -1) === -1 ?
-      GameState.DRAW : GameState.IN_PROCESS;
+    return noMoreFreeNodes(field) ? GameState.DRAW : GameState.IN_PROCESS;
   }
 };
 
@@ -48,7 +61,7 @@ const DiagRunnerDownToUp: IRunner = {
 
 const runners: IRunner[] = [HorizontalRunner, VerticalRunner, DiagRunnerUpToDown, DiagRunnerDownToUp];
 
-const run = (runner: IRunner, field: Mark[][], lastMove: IMove) => {
+const run = (runner: IRunner, field: Mark[][], lastMove: IPly) => {
   let total = 1;
   const {mark} = lastMove;
 
