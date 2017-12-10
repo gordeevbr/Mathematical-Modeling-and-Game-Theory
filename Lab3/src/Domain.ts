@@ -14,6 +14,7 @@ export interface IPly {
 
 export interface ITreeNode {
   winRate: number;
+  movesLeft: number;
   mark: Mark;
   children: ITreeNode[];
   field: Mark[][];

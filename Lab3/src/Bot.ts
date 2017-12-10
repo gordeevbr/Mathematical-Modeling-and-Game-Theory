@@ -2,6 +2,9 @@ import {constructTree} from "./ConstructTree";
 import {ITreeNode, Mark} from "./Domain";
 import {fieldDiff} from "./FieldUtils";
 
+const bestNodeComparator = (a: ITreeNode, b: ITreeNode) => Math.abs(b.winRate - a.winRate) < 0.001 ?
+  a.movesLeft - b.movesLeft : b.winRate - a.winRate;
+
 export class Bot {
 
   private movedCallback: (row: number, col: number) => void;
@@ -15,9 +18,9 @@ export class Bot {
 
   public move(currentField: Mark[][], movesSoFar: number) {
     this.currentTreeNode = movesSoFar === 0 ?
-      this.currentTreeNode.children.sort((a, b) => b.winRate - a.winRate)[0] :
+      this.currentTreeNode.children.sort(bestNodeComparator)[0] :
       this.currentTreeNode.children.find((node) => fieldDiff(node.field, currentField) == null)
-        .children.sort((a, b) => b.winRate - a.winRate)[0];
+        .children.sort(bestNodeComparator)[0];
 
     const nextMove = fieldDiff(this.currentTreeNode.field, currentField);
 

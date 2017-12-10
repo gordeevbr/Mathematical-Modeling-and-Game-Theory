@@ -19,6 +19,7 @@ export const constructTree = (): ITreeNode => {
     children: [],
     field: startingField,
     mark: Mark.NONE,
+    movesLeft: 0,
     winRate: 0,
   };
 
@@ -32,6 +33,7 @@ const createNode = (row: number, col: number, field: Mark[][], mark: Mark, key: 
     children: [],
     field,
     mark,
+    movesLeft: 1,
     winRate: 0,
   };
 
@@ -70,6 +72,8 @@ const parseNode = (node: ITreeNode, field: Mark[][], mark: Mark) => {
     }
   }
 
-  node.winRate = node.children
-    .sort((a, b) => nextMark === Mark.BOT ? b.winRate - a.winRate : a.winRate - b.winRate)[0].winRate;
+  const winNode = node.children
+    .sort((a, b) => nextMark === Mark.BOT ? b.winRate - a.winRate : a.winRate - b.winRate)[0];
+  node.winRate = winNode.winRate;
+  node.movesLeft = winNode.movesLeft + 1;
 };
