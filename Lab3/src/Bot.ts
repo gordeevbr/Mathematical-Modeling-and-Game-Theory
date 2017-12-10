@@ -1,5 +1,6 @@
 import {constructTree} from "./ConstructTree";
-import {IPly, ITreeNode} from "./Domain";
+import {ITreeNode, Mark} from "./Domain";
+import {fieldDiff} from "./FieldUtils";
 
 export class Bot {
 
@@ -12,12 +13,14 @@ export class Bot {
     this.treeTopNode = this.currentTreeNode = constructTree();
   }
 
-  public move(lastPly?: IPly) {
-    this.currentTreeNode = lastPly == null ?
+  public move(currentField: Mark[][], movesSoFar: number) {
+    this.currentTreeNode = movesSoFar === 0 ?
       this.currentTreeNode.children.sort((a, b) => b.winRate - a.winRate)[0] :
-      this.currentTreeNode.children.find((node) => node.col === lastPly.col && node.row === lastPly.row)
+      this.currentTreeNode.children.find((node) => fieldDiff(node.field, currentField) == null)
         .children.sort((a, b) => b.winRate - a.winRate)[0];
 
-    this.movedCallback(this.currentTreeNode.row, this.currentTreeNode.col);
+    const nextMove = fieldDiff(this.currentTreeNode.field, currentField);
+
+    this.movedCallback(nextMove[0], nextMove[1]);
   }
 }

@@ -28,7 +28,7 @@ export class TicTacToe extends React.Component<{}, ITicTacToeState> {
 
     this.setState(
       {field, bot, gameState: GameState.IN_PROCESS, log: []},
-      () => Config.playerGoesFirst ? null : bot.move(),
+      () => Config.playerGoesFirst ? null : bot.move(field, 0),
     );
   }
 
@@ -100,7 +100,7 @@ export class TicTacToe extends React.Component<{}, ITicTacToeState> {
 
   private botMove() {
     if (this.state.gameState === GameState.IN_PROCESS) {
-      this.state.bot.move(this.state.log[this.state.log.length - 1]);
+      this.state.bot.move(this.state.field, this.state.log.length);
     }
   }
 

@@ -1,5 +1,5 @@
 export enum Mark {
-  NONE = "", PLAYER = "O", BOT = "X",
+  NONE = " ", PLAYER = "O", BOT = "X",
 }
 
 export enum GameState {
@@ -14,8 +14,7 @@ export interface IPly {
 
 export interface ITreeNode {
   winRate: number;
-  row: number;
-  col: number;
   mark: Mark;
   children: ITreeNode[];
+  field: Mark[][];
 }

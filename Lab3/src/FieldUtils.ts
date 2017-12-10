@@ -24,6 +24,17 @@ export const getStateAfterMove = (field: Mark[][], lastMove: IPly) => {
   }
 };
 
+export const fieldDiff = (a: Mark[][], b: Mark[][]): [number, number] | null => {
+  for (let i = 0; i < Config.height; i++) {
+    for (let j = 0; j < Config.width; j++) {
+      if (a[i][j] !== b[i][j]) {
+        return [i, j];
+      }
+    }
+  }
+  return null;
+};
+
 interface IRunner {
   hasNext: (row: number, col: number) => boolean;
   hasPrev: (row: number, col: number) => boolean;
