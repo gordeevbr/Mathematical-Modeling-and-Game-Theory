@@ -2,7 +2,7 @@ import {constructTree} from "./ConstructTree";
 import {ITreeNode, Mark} from "./Domain";
 import {fieldDiff} from "./FieldUtils";
 
-const bestNodeComparator = (a: ITreeNode, b: ITreeNode) => Math.abs(b.winRate - a.winRate) < 0.001 ?
+const bestNodeComparator = (a: ITreeNode, b: ITreeNode) => Math.abs(b.winRate - a.winRate) < 0.000001 ?
   a.movesLeft - b.movesLeft : b.winRate - a.winRate;
 
 export class Bot {

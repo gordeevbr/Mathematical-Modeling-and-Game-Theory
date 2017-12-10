@@ -34,12 +34,29 @@ export class TicTacToe extends React.Component<{}, ITicTacToeState> {
 
   public render() {
     return (
-      <table>
-        <tbody>
-        {this.generateRows()}
-        </tbody>
-      </table>
+      <>
+        {this.generateHeaderMessage()}
+        <table>
+          <tbody>
+          {this.generateRows()}
+          </tbody>
+        </table>
+      </>
     );
+  }
+
+  private generateHeaderMessage() {
+    switch (this.state.gameState) {
+      case GameState.BOT_WON:
+        return <div className={"lose-header"}>I win!</div>;
+      case GameState.PLAYER_WON:
+        return <div className={"win-header"}>You win!</div>;
+      case GameState.DRAW:
+        return <div className={"draw-header"}>Draw!</div>;
+      case GameState.IN_PROCESS:
+      default:
+        return null;
+    }
   }
 
   private generateRows() {

@@ -5,3 +5,30 @@
   margin: 0;
   border: 0;
 }
+
+.lose-header {
+  border: rgba(255, 0, 0, 0.9) solid 2px;
+  border-radius: 5px;
+  background-color: rgba(255, 0, 0, 0.3);
+  padding: 10px;
+  width: 200px;
+  text-align: center;
+}
+
+.win-header {
+  border: rgba(0, 255, 0, 0.9) solid 2px;
+  border-radius: 5px;
+  background-color: rgba(0, 255, 0, 0.3);
+  padding: 10px;
+  width: 200px;
+  text-align: center;
+}
+
+.draw-header {
+  border: rgba(100, 100, 100, 0.9) solid 2px;
+  border-radius: 5px;
+  background-color: rgba(100, 100, 100, 0.3);
+  padding: 10px;
+  width: 200px;
+  text-align: center;
+}
